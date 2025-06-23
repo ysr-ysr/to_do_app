@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>LunaTasks</title>
+{% endblock %}
+
+{% block body %}
+
+<div class="content">
+    <h1><span>📝LunaTasks</span></h1>
+    <div class="p-container">
+        <p>Here you can edit your existing tasks .</p>
+        <p>Update a task ✅.</p>
+    </div>
+    
+    <form action="/update/{{task.id}}" method="POST">
+        <label for="content">Update your task here :</label>
+        <input type="text" placeholder="Add a new achievment" id="content" name="content" required value="{{task.content}}">
+        <input id="btn" type="submit" value="Update Task"></input>
+    </form>
+</div>
+
+{% endblock %}

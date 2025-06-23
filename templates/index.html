@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>LunaTasks</title>
+<style>
+  /* ===== Checkbox Styles ===== */
+  .checkbox-wrapper-12 {
+    position: relative;
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+  }
+
+  .cbx {
+    position: relative;
+    display: block;
+    width: 22px;
+    height: 22px;
+  }
+
+  .cbx input[type="checkbox"] {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .cbx label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #8e44ad;
+    cursor: pointer;
+    transition: 0.3s ease all;
+    background: white;
+    box-sizing: border-box;
+    z-index: 1;
+  }
+
+  .cbx svg {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 14px;
+    height: 14px;
+    stroke: #edd8f5;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+    opacity: 0;
+    transition: 0.3s ease all;
+    z-index: 3;
+  }
+
+  .cbx input[type="checkbox"]:checked + label {
+    background: #8e44ad;
+    border-color: #8e44ad;
+  }
+
+  .cbx input[type="checkbox"]:checked + label + svg {
+    opacity: 1;
+  }
+
+  /* Table and general styles */
+  .done {
+    text-decoration: line-through;
+    color: gray;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #f9f9f998;
+  }
+  th, td {
+    padding: 8px;
+    border: 1px solid #ccc;
+    /* text-align: left; */
+  }
+  form.add-task {
+    margin-bottom: 20px;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+  <h1><span>LunaTasks</span>, your personal task manager📜</h1>
+    <div class="p-container">
+      <p>Here you can manage your tasks for the day✨.</p>
+      <p>Add, update, or delete tasks as needed✍🏻.</p>
+    </div>
+
+  <form action="/" method="POST" class="add-task">
+    <label for="content">Add a new task:</label>
+    <input type="text" id="content" name="content" required>
+    <input id="btn" type="submit" value="Add Task">
+  </form>
+
+  {% if not tasks_pending and not tasks_done %}
+    <div class="p-container">
+      <p>No tasks to do, enjoy the silence🍁🍂!</p>
+    </div>
+  {% endif %}
+
+  {% if tasks_pending %}
+  <h2>📝 Tasks to Do</h2>
+
+  <table>
+    <tr>
+      <th>Done?</th>
+      <th>Task</th>
+      <th>Added</th>
+      <th>Actions</th>
+    </tr>
+    {% for task in tasks_pending %}
+    <tr>
+      <td>
+        <form action="{{ url_for('toggle', id=task.id) }}" method="POST" style="display:inline;">
+          <div class="checkbox-wrapper-12">
+            <div class="cbx">
+              <input 
+                type="checkbox" 
+                id="cbx-{{ task.id }}" 
+                name="completed" 
+                onChange="this.form.submit()" 
+                {% if task.completed %}checked{% endif %}>
+              <label for="cbx-{{ task.id }}"></label>
+              <svg fill="none" viewBox="0 0 15 14" height="14" width="15">
+                <path d="M2 8.36364L6.23077 12L13 2"></path>
+              </svg>
+            </div>
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none;">
+              <defs>
+                <filter id="goo-12">
+                  <feGaussianBlur result="blur" stdDeviation="4" in="SourceGraphic"></feGaussianBlur>
+                  <feColorMatrix result="goo-12" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" mode="matrix" in="blur"></feColorMatrix>
+                  <feBlend in2="goo-12" in="SourceGraphic"></feBlend>
+                </filter>
+              </defs>
+            </svg>
+          </div>
+        </form>
+      </td>
+      <td>{{ task.content }}</td>
+      <td>{{ task.date_created.date() }}</td>
+      <td>
+        <a href="/delete/{{ task.id }}">Delete</a> |
+        <a href="/update/{{ task.id }}">Edit</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+
+  {% if tasks_done %}
+  <h2>✅ Completed Tasks</h2>
+  <table>
+    <tr>
+      <th>Done?</th>
+      <th>Task</th>
+      <th>Added</th>
+      <th>Actions</th>
+    </tr>
+    {% for task in tasks_done %}
+    <tr>
+      <td>
+        <form action="{{ url_for('toggle', id=task.id) }}" method="POST" style="display:inline;">
+          <div class="checkbox-wrapper-12">
+            <div class="cbx">
+              <input 
+                type="checkbox" 
+                id="cbx-{{ task.id }}" 
+                name="completed" 
+                onChange="this.form.submit()" 
+                checked>
+              <label for="cbx-{{ task.id }}"></label>
+              <svg fill="none" viewBox="0 0 15 14" height="14" width="15">
+                <path d="M2 8.36364L6.23077 12L13 2"></path>
+              </svg>
+            </div>
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none;">
+              <defs>
+                <filter id="goo-12">
+                  <feGaussianBlur result="blur" stdDeviation="4" in="SourceGraphic"></feGaussianBlur>
+                  <feColorMatrix result="goo-12" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" mode="matrix" in="blur"></feColorMatrix>
+                  <feBlend in2="goo-12" in="SourceGraphic"></feBlend>
+                </filter>
+              </defs>
+            </svg>
+          </div>
+        </form>
+      </td>
+      <td class="done">{{ task.content }}</td>
+      <td>{{ task.date_created.date() }}</td>
+      <td>
+        <a href="/delete/{{ task.id }}">Delete</a> |
+        <a href="/update/{{ task.id }}">Edit</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+</div>
+{% endblock %}

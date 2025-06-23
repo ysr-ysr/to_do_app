@@ -1,0 +1,98 @@
+body {
+  background-color: #f0f0f0;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: rgb(104, 55, 154);
+  background-image: url("../téléchargé\ \(4\).jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
+
+.content {
+  position: absolute;
+  top: 7%;
+  width: 600px;
+  
+  background: rgba(255, 255, 255, 0.2); /* blanc transparent */
+  backdrop-filter: blur(10px); /* flou de 10px */
+  -webkit-backdrop-filter: blur(10px); /* pour Safari */
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  height: auto;
+}
+table , th , td , tr{
+    text-align: center;
+}
+
+ td  {
+    color: rgb(29, 11, 46);
+ }
+
+td a {
+  color: blueviolet;
+  text-decoration: none;
+  color: rgb(176, 130, 221);
+}
+td a:hover {
+  color: rgb(82, 71, 92);
+  cursor: pointer;
+}
+
+#content {
+    border: 1px solid rgb(201, 146, 253);
+    border-radius: 10px;
+    padding: 16px;
+    background-color: rgba(255, 255, 255, 0.8);
+    /* backdrop-filter: blur(10px); */ /* flou de 10px */
+    
+    
+}
+
+#btn {
+    background-color: blueviolet;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#btn:hover {
+    background-color: rgb(195, 170, 218);
+    transition: background-color 0.3s ease;
+
+}
+
+form label {
+    color: rgb(29, 11, 46);
+    font-weight: bold;
+}
+
+.content .p-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 1px dashed rgb(88, 55, 118);
+    border-radius: 10px;
+    padding: 3px;
+    height: auto;
+    margin-bottom: 20px;
+    color: rgb(29, 11, 46);
+
+}
+
+.content h1 span {
+    font-family:'Comic Sans MS', cursive, sans-serif;
+    color: rgb(149, 113, 183);
+    font-weight: bold;
+}
