@@ -46,6 +46,7 @@ def update(id):
     task = Todo.query.get_or_404(id)
     if request.method == 'POST':
         task.content = request.form['content']
+
         try:
             db.session.commit()
             return redirect('/')
@@ -68,6 +69,43 @@ def toggle(id):
 
 
 
+
+
+
+# AI PART --------
+
+import google.generativeai as genai
+from flask import jsonify
+
+genai.configure(api_key="AIzaSyCOtZhJhc1eZDv9HalauUcFh3JhV4wvIjQ")
+model = genai.GenerativeModel(model_name="models/gemini-1.5-flash")
+
+
+conversation_history = ["Tu es un coach personnel intelligent qui aide à organiser les tâches."
+    "Soyers concis et précis dans vos réponses."
+    "Tu peux répondre aux questions sur les tâches, les organiser et donner des conseils sur la gestion du temps."
+    "Tu peux aussi aider à prioriser les tâches en fonction de leur importance et de leur urgence."
+    "Tu peux aussi suggérer des méthodes pour améliorer la productivité."
+    "soyez gentil et encourageant dans vos réponses."
+    "tu peut utiliser des emojis mais juste un peut."
+]
+
+def ask_agent(question):
+    conversation_history.append("Utilisateur: " + question)
+    prompt = "\n".join(conversation_history) + "\nCoach:"
+    response = model.generate_content(prompt)
+    answer = response.text.strip()
+    conversation_history.append("Coach: " + answer)
+    return answer
+
+@app.route("/ask", methods=["POST"])
+def ask():
+    data = request.get_json()
+    question = data.get("message", "")
+    if not question:
+        return jsonify({"response": "Je n'ai pas compris."})
+    response = ask_agent(question)
+    return jsonify({"response": response})
 
 
 if __name__ == "__main__":
